@@ -15,9 +15,25 @@ export class App extends Component {
     filter: '',
   };
 
+  componentDidMount() {
+    const contactsFromLS = localStorage.getItem('contacts');
+    // console.log(contactsFromLS);
+    const parsedContacts = JSON.parse(contactsFromLS);
+    if (!parsedContacts) return;
+    this.setState({ contacts: parsedContacts });
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts ) {
+      // console.log(this.state.contacts);
+      // console.log(prevState.contacts);
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   handleChange = value => {
      this.setState({ filter: value });
-  };
+  }; 
 
   handleSubmit = ({ name, number }) => {
     const id = nanoid();
